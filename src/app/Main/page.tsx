@@ -1,10 +1,10 @@
 "use client";
 
 import styles from "./page.module.scss";
-import Header from "../ui/organisms/Header/page";
-import NomalButton from "../ui/atoms/NomalButton/page";
-import NumberButton from "../ui/atoms/NumberButton/page";
-import Input from "../ui/atoms/Input/pages";
+import Header from "../ui/organisms/Header";
+import NomalButton from "../ui/atoms/NomalButton";
+import NumberButton from "../ui/atoms/NumberButton";
+import Input from "../ui/atoms/Input";
 import { useState } from "react";
 
 export default function Main() {
