@@ -1,0 +1,14 @@
+.container {
+  .generate {
+    display: flex;
+    column-gap: 20px;
+    margin: 30px;
+  }
+
+  .buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 30px;
+  }
+}
