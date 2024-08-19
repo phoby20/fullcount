@@ -2,7 +2,7 @@
 
 import styles from "./page.module.scss";
 import Header from "../ui/organisms/Header/page";
-import Button from "../ui/atoms/Button/page";
+import NomalButton from "../ui/atoms/NomalButton/page";
 import NumberButton from "../ui/atoms/NumberButton/page";
 import Input from "../ui/atoms/Input/pages";
 import { useState } from "react";
@@ -37,9 +37,18 @@ export default function Main() {
     <div className={styles.container}>
       <Header />
       <section>
+        <p className={styles.label}>
+          生成したい数字を入力して 「生成」 ボタンをクリックしてください。
+        </p>
         <div className={styles.generate}>
-          <Input type={"number"} onChange={updateNumber} />
-          <Button clickButton={generateButton} buttonName={"生成"} />
+          <Input
+            type={"number"}
+            onChange={updateNumber}
+            placeholder={"数字を入力してください"}
+          />
+          <div className={styles.generate_button}>
+            <NomalButton clickButton={generateButton} buttonName={"生成"} />
+          </div>
         </div>
       </section>
 

@@ -2,17 +2,17 @@
 
 import styles from "./page.module.scss";
 
-type ButtonType = {
+type NomalButtonType = {
   buttonName: string;
   clickButton: () => void;
   disabled?: boolean; // disabled 속성 추가
 };
 
-export default function Button({
+export default function NomalButton({
   buttonName,
   clickButton,
   disabled = false,
-}: ButtonType) {
+}: NomalButtonType) {
   return (
     <button
       className={styles.button}
