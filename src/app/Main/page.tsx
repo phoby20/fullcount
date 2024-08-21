@@ -25,7 +25,7 @@ export default function Main() {
     if (
       !remainingCount ||
       isEnabled ||
-      confirm("リセット後、ボタンを再度生成しますか")
+      confirm("すべての記録をリセットし、ボタンを再生成しますか")
     ) {
       const newButtons = Array.from({ length: totalUser }, (_, index) => ({
         id: index + 1,
