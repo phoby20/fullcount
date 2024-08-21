@@ -4,10 +4,20 @@
   padding: 0px 30px;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #eee;
+  justify-content: space-between;
+  position: fixed;
+  top: 0px;
+  background-color: #eee;
+  color: black;
 
   .logo {
     font-weight: bold;
-    font-size: 26px;
+    font-size: 24px;
+  }
+
+  .right_box {
+    .count {
+      font-size: 18px;
+    }
   }
 }
