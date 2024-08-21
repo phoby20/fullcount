@@ -11,4 +11,9 @@
   &:active {
     background-color: gray;
   }
+
+  &:disabled {
+    background-color: rgb(65, 65, 65);
+    cursor: not-allowed;
+  }
 }
