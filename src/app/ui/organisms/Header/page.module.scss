@@ -1,7 +1,7 @@
 .container {
   width: 100%;
   height: 50px;
-  padding: 0px 20px;
+  padding: 0px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -9,6 +9,7 @@
   top: 0px;
   background-color: #eee;
   color: black;
+  z-index: 2;
 
   .logo {
     font-weight: bold;
@@ -18,6 +19,19 @@
   .right_box {
     .count {
       font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      column-gap: 10px;
+
+      .show_not_checked_modal {
+        padding: 10px 20px;
+        font-size: 18px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        background-color: rgb(37, 37, 37);
+      }
     }
   }
 }
