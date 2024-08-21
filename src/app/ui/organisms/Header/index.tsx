@@ -28,7 +28,7 @@ export default function Header({
         <div className={styles.count}>
           残り <strong>{count}</strong>
           <button className={styles.show_not_checked_modal} onClick={showModal}>
-            {showNotCheckedModal ? "閉じる" : "未チェック"}
+            {showNotCheckedModal ? "閉じる" : "現状確認"}
           </button>
         </div>
       </div>
