@@ -10,9 +10,15 @@ const boogaloo = Boogaloo({
 
 type HeaderType = {
   count: number;
+  showModal: () => void;
+  showNotCheckedModal: boolean;
 };
 
-export default function Header({ count }: HeaderType) {
+export default function Header({
+  count,
+  showModal,
+  showNotCheckedModal,
+}: HeaderType) {
   const logoText = "full count".toUpperCase();
 
   return (
@@ -20,7 +26,10 @@ export default function Header({ count }: HeaderType) {
       <div className={`${styles.logo} ${boogaloo.className}`}>{logoText}</div>
       <div className={styles.right_box}>
         <div className={styles.count}>
-          残り：<strong>{count}</strong>
+          残り <strong>{count}</strong>
+          <button className={styles.show_not_checked_modal} onClick={showModal}>
+            {showNotCheckedModal ? "閉じる" : "未チェック"}
+          </button>
         </div>
       </div>
     </div>
