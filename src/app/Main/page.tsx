@@ -5,7 +5,8 @@ import Header from "../ui/organisms/Header";
 import NomalButton from "../ui/atoms/NomalButton";
 import NumberButton from "../ui/atoms/NumberButton";
 import Input from "../ui/atoms/Input";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import NotCheckedModal from "../ui/organisms/NotCheckedModal";
 
 export default function Main() {
   const [totalUser, setTotalUser] = useState(0); // 숫자를 입력받아 저장
@@ -14,6 +15,8 @@ export default function Main() {
   ); // 버튼들의 상태를 저장
   const [clickCount, setClickCount] = useState(0); //클릭한 버튼의 갯수
   const [remainingCount, setRemainingCount] = useState(0); //아직 클릭하지 않은 갯수
+  const [showNotCheckedModal, setShowNotCheckedModal] = useState(false);
+  const elementRef = useRef<HTMLDivElement>(null);
 
   const updateNumber = (value: string) => {
     setTotalUser(Number(value)); // 입력된 숫자를 totalUser 상태에 저장
@@ -35,6 +38,7 @@ export default function Main() {
       setClickCount(0);
       setRemainingCount(totalUser - clickCount);
       setTotalUser(0);
+      setShowNotCheckedModal(false);
     }
   };
 
@@ -47,9 +51,33 @@ export default function Main() {
     setRemainingCount(remainingCount - 1);
   };
 
+  const switchModal = () => {
+    setShowNotCheckedModal(!showNotCheckedModal);
+  };
+
+  useEffect(() => {
+    if (showNotCheckedModal && elementRef.current) {
+      // 세로 스크롤 비활성화
+      elementRef.current.style.display = "none";
+    } else {
+      // 세로 스크롤 활성화
+      if (elementRef.current) {
+        elementRef.current.style.display = "block";
+      }
+    }
+  }, [showNotCheckedModal]);
+
   return (
-    <div className={styles.container}>
-      <Header count={remainingCount} />
+    <div
+      className={`${styles.container} ${
+        showNotCheckedModal ? styles.hidden_overflow : ""
+      }`}
+    >
+      <Header
+        count={remainingCount}
+        showModal={switchModal}
+        showNotCheckedModal={showNotCheckedModal}
+      />
       <section>
         <div className={styles.generate_wrap}>
           <div className={styles.generate}>
@@ -71,7 +99,7 @@ export default function Main() {
       </section>
 
       <section>
-        <div className={styles.button_wrap}>
+        <div className={styles.button_wrap} ref={elementRef}>
           {buttons.length > 0 ? (
             <div className={styles.buttons}>
               {buttons.map(({ id, enabled }) => (
@@ -93,6 +121,11 @@ export default function Main() {
           )}
         </div>
       </section>
+      {showNotCheckedModal ? (
+        <NotCheckedModal count={remainingCount} buttons={buttons} />
+      ) : (
+        ""
+      )}
     </div>
   );
 }
