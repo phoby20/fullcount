@@ -7,6 +7,20 @@ import NumberButton from "../ui/atoms/NumberButton";
 import Input from "../ui/atoms/Input";
 import { useEffect, useRef, useState } from "react";
 import NotCheckedModal from "../ui/organisms/NotCheckedModal";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGripVertical, faList } from "@fortawesome/free-solid-svg-icons";
+
+config.autoAddCss = false;
+
+const blockStyle = {
+  display: "flex",
+  flexDirection: "column",
+};
+const gridStyle = {
+  display: "grid",
+};
 
 export default function Main() {
   const [totalUser, setTotalUser] = useState(0); // 숫자를 입력받아 저장
@@ -16,6 +30,7 @@ export default function Main() {
   const [clickCount, setClickCount] = useState(0); //클릭한 버튼의 갯수
   const [remainingCount, setRemainingCount] = useState(0); //아직 클릭하지 않은 갯수
   const [showNotCheckedModal, setShowNotCheckedModal] = useState(false);
+  const [isGrid, setIsgrid] = useState(true);
   const elementRef = useRef<HTMLDivElement>(null);
 
   const updateNumber = (value: string) => {
@@ -53,6 +68,10 @@ export default function Main() {
 
   const switchModal = () => {
     setShowNotCheckedModal(!showNotCheckedModal);
+  };
+
+  const switchGridButton = () => {
+    setIsgrid(!isGrid);
   };
 
   useEffect(() => {
@@ -94,6 +113,22 @@ export default function Main() {
                 disabled={totalUser ? false : true}
               />
             </div>
+            <button
+              className={styles.generate_align_button}
+              onClick={switchGridButton}
+            >
+              {isGrid ? (
+                <>
+                  <FontAwesomeIcon icon={faGripVertical} />
+                  grid
+                </>
+              ) : (
+                <>
+                  <FontAwesomeIcon icon={faList} />
+                  list
+                </>
+              )}
+            </button>
           </div>
         </div>
       </section>
@@ -101,7 +136,10 @@ export default function Main() {
       <section>
         <div className={styles.button_wrap} ref={elementRef}>
           {buttons.length > 0 ? (
-            <div className={styles.buttons}>
+            <div
+              className={styles.buttons}
+              style={isGrid ? blockStyle : gridStyle}
+            >
               {buttons.map(({ id, enabled }) => (
                 <NumberButton
                   key={id}

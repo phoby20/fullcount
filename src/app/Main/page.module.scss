@@ -3,11 +3,17 @@
     margin-top: 70px;
     .generate {
       display: flex;
-      column-gap: 20px;
+      column-gap: 14px;
       margin: 16px;
 
       &_button {
         width: 200px;
+      }
+
+      &_align_button {
+        padding: 0 20px;
+        border-radius: 5px;
+        border: none;
       }
     }
   }
