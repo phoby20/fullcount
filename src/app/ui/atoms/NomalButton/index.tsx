@@ -11,7 +11,7 @@ type NomalButtonType = {
 export default function NomalButton({
   buttonName,
   clickButton,
-  disabled = false,
+  disabled,
 }: NomalButtonType) {
   return (
     <button
