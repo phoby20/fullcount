@@ -74,6 +74,20 @@ export default function Main() {
     setIsgrid(!isGrid);
   };
 
+  const preventClose = (e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = ""; //Chrome에서 동작하도록; deprecated
+  };
+
+  useEffect(() => {
+    (() => {
+      window.addEventListener("beforeunload", preventClose);
+    })();
+    return () => {
+      window.removeEventListener("beforeunload", preventClose);
+    };
+  }, []);
+
   useEffect(() => {
     if (showNotCheckedModal && elementRef.current) {
       // 세로 스크롤 비활성화
