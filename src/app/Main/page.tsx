@@ -10,7 +10,15 @@ import NotCheckedModal from "../ui/organisms/NotCheckedModal";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGripVertical, faList } from "@fortawesome/free-solid-svg-icons";
+import {
+  faGripVertical,
+  faList,
+  faQrcode,
+  faCircleXmark,
+} from "@fortawesome/free-solid-svg-icons";
+import Html5QrcodePlugin from "../ui/molecules/Html5QrcodeScannerPlugin";
+import { Html5QrcodeResult } from "html5-qrcode";
+import { Html5QrcodeError } from "html5-qrcode/esm/core";
 
 config.autoAddCss = false;
 
@@ -32,6 +40,8 @@ export default function Main() {
   const [showNotCheckedModal, setShowNotCheckedModal] = useState(false);
   const [isGrid, setIsgrid] = useState(true);
   const elementRef = useRef<HTMLDivElement>(null);
+  const [cameraOn, setCameraOn] = useState(false);
+  const [capturedNumber, setCapturedNumber] = useState<string>("");
 
   const updateNumber = (value: string) => {
     setTotalUser(Number(value)); // 입력된 숫자를 totalUser 상태에 저장
@@ -79,6 +89,23 @@ export default function Main() {
     e.returnValue = ""; //Chrome에서 동작하도록; deprecated
   };
 
+  const switchOnCamera = () => {
+    setCameraOn(!cameraOn);
+  };
+
+  const onNewScanResult = (decodedText: string, result: Html5QrcodeResult) => {
+    // handle decoded results here
+    console.log("decodedText : ", decodedText);
+    setCapturedNumber(decodedText);
+  };
+
+  function onScanFailure(errorMessage: string, error: Html5QrcodeError) {
+    // handle scan failure, usually better to ignore and keep scanning.
+    // for example:
+    // console.warn(`Code scan error = ${error.errorMessage}`);
+    console.log("error.errorMessage : ", error.errorMessage);
+  }
+
   useEffect(() => {
     (() => {
       window.addEventListener("beforeunload", preventClose);
@@ -100,6 +127,15 @@ export default function Main() {
     }
   }, [showNotCheckedModal]);
 
+  useEffect(() => {
+    buttons.filter((button) => {
+      if (button.id === Number(capturedNumber)) {
+        button.enabled = false;
+        setRemainingCount(remainingCount - 1);
+      }
+    });
+  }, [capturedNumber]);
+
   return (
     <div
       className={`${styles.container} ${
@@ -111,6 +147,7 @@ export default function Main() {
         showModal={switchModal}
         showNotCheckedModal={showNotCheckedModal}
       />
+
       <section>
         <div className={styles.generate_wrap}>
           <div className={styles.generate}>
@@ -134,22 +171,54 @@ export default function Main() {
               {isGrid ? (
                 <>
                   <FontAwesomeIcon icon={faGripVertical} />
-                  grid
+                  <span>grid</span>
                 </>
               ) : (
                 <>
                   <FontAwesomeIcon icon={faList} />
-                  list
+                  <span>list</span>
                 </>
               )}
             </button>
           </div>
+
+          {buttons.length ? (
+            <div className={styles.qrcode_button}>
+              <button onClick={switchOnCamera}>
+                {cameraOn ? (
+                  <FontAwesomeIcon icon={faCircleXmark} />
+                ) : (
+                  <FontAwesomeIcon icon={faQrcode} />
+                )}
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </section>
 
       <section>
+        {cameraOn ? (
+          <div className={styles.qr_camera}>
+            <Html5QrcodePlugin
+              fps={1000}
+              qrbox={250}
+              disableFlip={true}
+              aspectRatio={0}
+              verbose={false}
+              qrCodeSuccessCallback={onNewScanResult}
+              qrCodeErrorCallback={onScanFailure}
+            />
+          </div>
+        ) : (
+          ""
+        )}
+      </section>
+
+      <section>
         <div className={styles.button_wrap} ref={elementRef}>
-          {buttons.length > 0 ? (
+          {buttons.length > 0 && !cameraOn ? (
             <div
               className={styles.buttons}
               style={isGrid ? blockStyle : gridStyle}
