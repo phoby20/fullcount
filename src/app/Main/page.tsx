@@ -13,8 +13,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGripVertical,
   faList,
-  faCamera,
+  faQrcode,
+  faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
+import Html5QrcodePlugin from "../ui/molecules/Html5QrcodeScannerPlugin";
+import { Html5QrcodeResult } from "html5-qrcode";
+import { Html5QrcodeError } from "html5-qrcode/esm/core";
 
 config.autoAddCss = false;
 
@@ -36,7 +40,6 @@ export default function Main() {
   const [showNotCheckedModal, setShowNotCheckedModal] = useState(false);
   const [isGrid, setIsgrid] = useState(true);
   const elementRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [cameraOn, setCameraOn] = useState(false);
   const [capturedNumber, setCapturedNumber] = useState<string>("");
 
@@ -86,23 +89,22 @@ export default function Main() {
     e.returnValue = ""; //Chrome에서 동작하도록; deprecated
   };
 
-  const readyCamera = async () => {
-    if (videoRef.current) {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" }, // 후면 카메라 사용
-        });
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
-      } catch (error) {
-        console.error("Error accessing the camera:", error);
-      }
-    }
+  const switchOnCamera = () => {
+    setCameraOn(!cameraOn);
   };
 
-  const startCamera = () => {
-    setCameraOn(true);
+  const onNewScanResult = (decodedText: string, result: Html5QrcodeResult) => {
+    // handle decoded results here
+    console.log("decodedText : ", decodedText);
+    setCapturedNumber(decodedText);
   };
+
+  function onScanFailure(errorMessage: string, error: Html5QrcodeError) {
+    // handle scan failure, usually better to ignore and keep scanning.
+    // for example:
+    // console.warn(`Code scan error = ${error.errorMessage}`);
+    console.log("error.errorMessage : ", error.errorMessage);
+  }
 
   useEffect(() => {
     (() => {
@@ -126,8 +128,13 @@ export default function Main() {
   }, [showNotCheckedModal]);
 
   useEffect(() => {
-    readyCamera();
-  }, [cameraOn]);
+    buttons.filter((button) => {
+      if (button.id === Number(capturedNumber)) {
+        button.enabled = false;
+        setRemainingCount(remainingCount - 1);
+      }
+    });
+  }, [capturedNumber]);
 
   return (
     <div
@@ -140,6 +147,7 @@ export default function Main() {
         showModal={switchModal}
         showNotCheckedModal={showNotCheckedModal}
       />
+
       <section>
         <div className={styles.generate_wrap}>
           <div className={styles.generate}>
@@ -176,8 +184,12 @@ export default function Main() {
 
           {buttons.length ? (
             <div className={styles.camera_button}>
-              <button onClick={startCamera}>
-                <FontAwesomeIcon icon={faCamera} />
+              <button onClick={switchOnCamera}>
+                {cameraOn ? (
+                  <FontAwesomeIcon icon={faCircleXmark} />
+                ) : (
+                  <FontAwesomeIcon icon={faQrcode} />
+                )}
               </button>
             </div>
           ) : (
@@ -188,8 +200,16 @@ export default function Main() {
 
       <section>
         {cameraOn ? (
-          <div className={styles.canvas_wrap}>
-            <video ref={videoRef} width="100%" height="auto"></video>
+          <div className={styles.qr_camera}>
+            <Html5QrcodePlugin
+              fps={1000}
+              qrbox={250}
+              disableFlip={true}
+              aspectRatio={0}
+              verbose={false}
+              qrCodeSuccessCallback={onNewScanResult}
+              qrCodeErrorCallback={onScanFailure}
+            />
           </div>
         ) : (
           ""
