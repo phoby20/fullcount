@@ -2,8 +2,6 @@ import { Html5QrcodeResult, Html5QrcodeScanner } from "html5-qrcode";
 import { Html5QrcodeError } from "html5-qrcode/esm/core";
 import { useEffect } from "react";
 
-const qrcodeRegionId = "html5qr-code-full-region";
-
 type Html5QrcodePluginType = {
   fps: number;
   qrbox: number;
@@ -17,6 +15,7 @@ type Html5QrcodePluginType = {
   qrCodeErrorCallback: (errorMessage: string, error: Html5QrcodeError) => void;
 };
 
+const qrcodeRegionId = "html5qr-code-full-region";
 // Creates the configuration object for Html5QrcodeScanner.
 const createConfig = (props: Html5QrcodePluginType) => {
   let config = {
