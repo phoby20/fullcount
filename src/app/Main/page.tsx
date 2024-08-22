@@ -10,7 +10,11 @@ import NotCheckedModal from "../ui/organisms/NotCheckedModal";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGripVertical, faList } from "@fortawesome/free-solid-svg-icons";
+import {
+  faGripVertical,
+  faList,
+  faCamera,
+} from "@fortawesome/free-solid-svg-icons";
 
 config.autoAddCss = false;
 
@@ -32,6 +36,9 @@ export default function Main() {
   const [showNotCheckedModal, setShowNotCheckedModal] = useState(false);
   const [isGrid, setIsgrid] = useState(true);
   const elementRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [cameraOn, setCameraOn] = useState(false);
+  const [capturedNumber, setCapturedNumber] = useState<string>("");
 
   const updateNumber = (value: string) => {
     setTotalUser(Number(value)); // 입력된 숫자를 totalUser 상태에 저장
@@ -79,6 +86,24 @@ export default function Main() {
     e.returnValue = ""; //Chrome에서 동작하도록; deprecated
   };
 
+  const readyCamera = async () => {
+    if (videoRef.current) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "environment" }, // 후면 카메라 사용
+        });
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+      } catch (error) {
+        console.error("Error accessing the camera:", error);
+      }
+    }
+  };
+
+  const startCamera = () => {
+    setCameraOn(true);
+  };
+
   useEffect(() => {
     (() => {
       window.addEventListener("beforeunload", preventClose);
@@ -99,6 +124,10 @@ export default function Main() {
       }
     }
   }, [showNotCheckedModal]);
+
+  useEffect(() => {
+    readyCamera();
+  }, [cameraOn]);
 
   return (
     <div
@@ -144,7 +173,27 @@ export default function Main() {
               )}
             </button>
           </div>
+
+          {buttons.length ? (
+            <div className={styles.camera_button}>
+              <button onClick={startCamera}>
+                <FontAwesomeIcon icon={faCamera} />
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
+      </section>
+
+      <section>
+        {cameraOn ? (
+          <div className={styles.canvas_wrap}>
+            <video ref={videoRef} width="100%" height="auto"></video>
+          </div>
+        ) : (
+          ""
+        )}
       </section>
 
       <section>
