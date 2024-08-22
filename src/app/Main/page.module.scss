@@ -14,12 +14,19 @@
         padding: 0 20px;
         border-radius: 5px;
         border: none;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100px;
       }
     }
 
-    .camera_button {
+    .qrcode_button {
       width: 100%;
       padding: 0 14px;
+      color: white;
 
       & > button {
         width: 100%;

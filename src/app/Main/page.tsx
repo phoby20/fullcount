@@ -171,19 +171,19 @@ export default function Main() {
               {isGrid ? (
                 <>
                   <FontAwesomeIcon icon={faGripVertical} />
-                  grid
+                  <span>grid</span>
                 </>
               ) : (
                 <>
                   <FontAwesomeIcon icon={faList} />
-                  list
+                  <span>list</span>
                 </>
               )}
             </button>
           </div>
 
           {buttons.length ? (
-            <div className={styles.camera_button}>
+            <div className={styles.qrcode_button}>
               <button onClick={switchOnCamera}>
                 {cameraOn ? (
                   <FontAwesomeIcon icon={faCircleXmark} />
@@ -218,7 +218,7 @@ export default function Main() {
 
       <section>
         <div className={styles.button_wrap} ref={elementRef}>
-          {buttons.length > 0 ? (
+          {buttons.length > 0 && !cameraOn ? (
             <div
               className={styles.buttons}
               style={isGrid ? blockStyle : gridStyle}
