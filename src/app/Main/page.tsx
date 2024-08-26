@@ -230,10 +230,9 @@ export default function Main() {
                 qrCodeSuccessCallback={onNewScanResult}
                 qrCodeErrorCallback={onScanFailure}
               />
-              {/* {qrCheckCoverVisible && (
+              {qrCheckCoverVisible && (
                 <div className={styles.qr_check_cover}>{capturedNumber}</div>
-              )} */}
-              <div className={styles.qr_check_cover}>5</div>
+              )}
             </div>
           </>
         ) : (
