@@ -47,13 +47,20 @@
   }
 
   .qr_check_cover {
-    width: 100%;
+    width: 93%;
     background-color: rgba(0, 255, 26, 0.702);
-    height: 100%;
-    max-height: 100vh;
+    height: 100vh;
+    max-height: 600px;
     z-index: 2;
     position: absolute;
     top: 14px;
+    color: white;
+    font-size: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    font-weight: bold;
+    padding-top: 60px;
   }
 
   .button_wrap {
