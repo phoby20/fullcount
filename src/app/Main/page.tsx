@@ -115,7 +115,7 @@ export default function Main() {
     setQrCheckCoverVisible(true);
     setTimeout(() => {
       setQrCheckCoverVisible(false);
-    }, 1500);
+    }, 800);
   };
 
   function onScanFailure(errorMessage: string, error: Html5QrcodeError) {
@@ -231,7 +231,7 @@ export default function Main() {
                 qrCodeErrorCallback={onScanFailure}
               />
               {qrCheckCoverVisible && (
-                <div className={styles.qr_check_cover}></div>
+                <div className={styles.qr_check_cover}>{capturedNumber}</div>
               )}
             </div>
           </>
