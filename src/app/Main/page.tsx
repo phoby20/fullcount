@@ -42,6 +42,7 @@ export default function Main() {
   const elementRef = useRef<HTMLDivElement>(null);
   const [cameraOn, setCameraOn] = useState(false);
   const [capturedNumber, setCapturedNumber] = useState<string>("");
+  const [qrCheckCoverVisible, setQrCheckCoverVisible] = useState(false);
 
   const updateNumber = (value: string) => {
     setTotalUser(Number(value)); // 입력된 숫자를 totalUser 상태에 저장
@@ -109,6 +110,12 @@ export default function Main() {
     // handle decoded results here
     // console.log("decodedText : ", decodedText);
     setCapturedNumber(decodedText);
+
+    // qr_check_cover를 1.5초 동안 표시
+    setQrCheckCoverVisible(true);
+    setTimeout(() => {
+      setQrCheckCoverVisible(false);
+    }, 1500);
   };
 
   function onScanFailure(errorMessage: string, error: Html5QrcodeError) {
@@ -212,17 +219,22 @@ export default function Main() {
 
       <section>
         {cameraOn ? (
-          <div className={styles.qr_camera}>
-            <Html5QrcodePlugin
-              fps={1000}
-              qrbox={250}
-              disableFlip={true}
-              aspectRatio={0}
-              verbose={false}
-              qrCodeSuccessCallback={onNewScanResult}
-              qrCodeErrorCallback={onScanFailure}
-            />
-          </div>
+          <>
+            <div className={styles.qr_camera}>
+              <Html5QrcodePlugin
+                fps={1000}
+                qrbox={250}
+                disableFlip={true}
+                aspectRatio={0}
+                verbose={false}
+                qrCodeSuccessCallback={onNewScanResult}
+                qrCodeErrorCallback={onScanFailure}
+              />
+              {qrCheckCoverVisible && (
+                <div className={styles.qr_check_cover}></div>
+              )}
+            </div>
+          </>
         ) : (
           ""
         )}
