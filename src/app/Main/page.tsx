@@ -67,13 +67,25 @@ export default function Main() {
     }
   };
 
-  const handleButtonClick = (id: number) => {
+  const handleButtonClick = (id: number, enabled: boolean) => {
+    if (!enabled) {
+      const shouldEnable = confirm("このボタンを有効化しますか？");
+      if (!shouldEnable) {
+        return; // 사용자가 취소를 눌렀다면 함수 종료
+      }
+    }
+
     setButtons((prevButtons) =>
       prevButtons.map((button) =>
-        button.id === id ? { ...button, enabled: false } : button
+        button.id === id ? { ...button, enabled: !enabled } : button
       )
-    ); // 클릭된 버튼을 비활성화
-    setRemainingCount(remainingCount - 1);
+    );
+
+    if (enabled) {
+      setRemainingCount((prevCount) => prevCount - 1);
+    } else {
+      setRemainingCount((prevCount) => prevCount + 1);
+    }
   };
 
   const switchModal = () => {
@@ -95,8 +107,9 @@ export default function Main() {
 
   const onNewScanResult = (decodedText: string, result: Html5QrcodeResult) => {
     // handle decoded results here
-    console.log("decodedText : ", decodedText);
+    // console.log("decodedText : ", decodedText);
     setCapturedNumber(decodedText);
+    window.navigator.vibrate(200);
   };
 
   function onScanFailure(errorMessage: string, error: Html5QrcodeError) {
@@ -226,7 +239,7 @@ export default function Main() {
               {buttons.map(({ id, enabled }) => (
                 <NumberButton
                   key={id}
-                  clickButton={() => handleButtonClick(id)}
+                  clickButton={() => handleButtonClick(id, enabled)}
                   buttonName={String(id)}
                   disabled={!enabled} // 버튼이 비활성화된 경우 disabled 속성 추가
                 />

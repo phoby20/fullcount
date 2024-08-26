@@ -8,10 +8,9 @@
   border: none;
   cursor: pointer;
   border-radius: 6px;
-
-  &:disabled {
-    background-color: rgb(55, 55, 55); // 비활성화 상태일 때 배경색 설정
-    cursor: not-allowed; // 비활성화된 버튼의 커서를 변경 (선택 사항)
-    color: #565656;
-  }
+}
+.disabled {
+  background-color: rgb(55, 55, 55); // 비활성화 상태일 때 배경색 설정
+  cursor: not-allowed; // 비활성화된 버튼의 커서를 변경 (선택 사항)
+  color: #565656;
 }

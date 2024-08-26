@@ -15,9 +15,8 @@ export default function NumberButton({
 }: NumberButtonType) {
   return (
     <button
-      className={styles.button}
+      className={`${styles.button} ${!disabled ? "" : styles.disabled}`}
       onClick={clickButton}
-      disabled={disabled} // 버튼이 비활성화된 경우 클릭 불가능
     >
       {buttonName}
     </button>
