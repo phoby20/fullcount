@@ -107,8 +107,9 @@ export default function Main() {
 
   const onNewScanResult = (decodedText: string, result: Html5QrcodeResult) => {
     // handle decoded results here
-    console.log("decodedText : ", decodedText);
+    // console.log("decodedText : ", decodedText);
     setCapturedNumber(decodedText);
+    window.navigator.vibrate(200);
   };
 
   function onScanFailure(errorMessage: string, error: Html5QrcodeError) {
